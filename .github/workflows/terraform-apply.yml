@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Terraform V2'
 on:
   workflow_dispatch:
     inputs:
@@ -10,14 +10,16 @@ on:
         options:
         - Dev
         - QA
+        - STG
       Infra_type:
         type: choice
         description: Select the type of infrastructure
         required: true
         default: 'venuemaster-pimcore'
         options:
-        - venuemaster-pimcore
-        - publisher
+        - FE-Interno
+
+
 defaults:
   run:
     shell: bash  
