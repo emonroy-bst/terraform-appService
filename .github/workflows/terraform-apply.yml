@@ -88,15 +88,15 @@ jobs:
     #  run: terraform validate -no-color
     #  working-directory: ${{ env.ROOT_PATH }}
       
-    #- name: Terraform Plan
-    #  id: plan
+    - name: Terraform Plan
+      id: plan
     #  env:
     #    ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
     #    ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
     #    ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
     #    ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-    #  run: terraform plan -no-color -var-file="env.tfvars" -input=false
-    #  working-directory: ${{ env.ROOT_PATH }}
+      run: terraform plan
+      working-directory: ${{ env.ROOT_PATH }}
 
     #- name: Terraform Apply
     #  env:
