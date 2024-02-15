@@ -53,6 +53,7 @@ jobs:
     - name: check env.tfvars file
       run: |
         cd ${{ env.ROOT_PATH }}
+        echo ${{ secrets.ARM_CLIENT_ID }}
         ls -ltr
         pwd
         cat provider.tf
