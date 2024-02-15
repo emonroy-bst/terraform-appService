@@ -17,7 +17,7 @@ on:
         required: true
         default: 'venuemaster-pimcore'
         options:
-        - FE-Interno
+        - Frontend/Interno/IAC
 
 
 defaults:
@@ -46,72 +46,62 @@ jobs:
       with:
         tokenPrefix: '@@'
         tokenSuffix: '@@'
-        files: '${{ env.ROOT_PATH }}/env.tfvars'
+        files: '${{ env.ROOT_PATH }}/provider.tf'
       env: 
-        Product_Name: ${{vars.Product_Name}}
-        env: ${{vars.env}}
-        tfstate_sa: ${{vars.tfstate_sa}}
-        redis_capacity: ${{vars.redis_capacity}}
-        redis_sku_family: ${{vars.redis_sku_family}}
-        redis_sku: ${{vars.redis_sku}}
-        url_runbook: ${{vars.url_runbook}}
-        function_name: ${{vars.function_name}}
-        rg_function: ${{vars.rg_function}}
-        sa_tier: ${{vars.sa_tier}}
-        sa_replicationtype: ${{vars.sa_replicationtype}}
-        acc_identity: ${{vars.acc_identity}}
+        WorkspaceTF: ${{vars.WorkspaceTF}}
         
     - name: check env.tfvars file
       run: |
         cd ${{ env.ROOT_PATH }}
         ls -ltr
         pwd
-        #cat env.tfvars
+        cat provider.tf
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
-        
+
     - name: Terraform Init
       id: init
       env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        STORAGE_ACCOUNT: ${{ vars.storageaccount }}
-        CONTAINER_NAME: ${{ vars.container_name }}
-        RESOURCE_GROUP: ${{ vars.ResourceGroup }}
-        KEY: ${{ github.event.inputs.Infra_type }}-${{ github.event.inputs.environment }}.tfstate
+        TF_API_TOKEN: "${{secrets.TF_API_TOKEN}}"
+      #  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      #  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      #  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      #  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      #  STORAGE_ACCOUNT: ${{ vars.storageaccount }}
+      #  CONTAINER_NAME: ${{ vars.container_name }}
+      #  RESOURCE_GROUP: ${{ vars.ResourceGroup }}
+      #  KEY: ${{ github.event.inputs.Infra_type }}-${{ github.event.inputs.environment }}.tfstate
       run: |
        rm -rf .terraform
-       terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="resource_group_name=$RESOURCE_GROUP" -backend-config="key=$KEY" -no-color -input=false
+       terraform init
       working-directory: ${{ env.ROOT_PATH }}
 
-    - name: Terraform Format
-      id: fmt
-      run: terraform fmt -check
-      working-directory: ${{ env.ROOT_PATH }}
+    #- name: Terraform Format
+    #  id: fmt
+    #  run: terraform fmt -check
+    #  working-directory: ${{ env.ROOT_PATH }}
       
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color
-      working-directory: ${{ env.ROOT_PATH }}
+    #- name: Terraform Validate
+    #  id: validate
+    #  run: terraform validate -no-color
+    #  working-directory: ${{ env.ROOT_PATH }}
       
-    - name: Terraform Plan
-      id: plan
-      env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      run: terraform plan -no-color -var-file="env.tfvars" -input=false
-      working-directory: ${{ env.ROOT_PATH }}
+    #- name: Terraform Plan
+    #  id: plan
+    #  env:
+    #    ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+    #    ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+    #    ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    #    ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+    #  run: terraform plan -no-color -var-file="env.tfvars" -input=false
+    #  working-directory: ${{ env.ROOT_PATH }}
 
-    - name: Terraform Apply
-      env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      run: terraform apply -auto-approve -var-file="env.tfvars" -input=false
-      working-directory: ${{ env.ROOT_PATH }}
+    #- name: Terraform Apply
+    #  env:
+    #    ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+    #    ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+    #    ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    #    ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+    #  run: terraform apply -auto-approve -var-file="env.tfvars" -input=false
+    #  working-directory: ${{ env.ROOT_PATH }}

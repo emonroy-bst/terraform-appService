@@ -5,7 +5,7 @@ terraform {
     organization = "mily-sigue"
 
     workspaces {
-      name = "integration-dev"
+      name = "@@WorkspaceTF@@"
     }
   }
 
