@@ -12,18 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: Dev
     steps:
-    - name: Run script file
-      if: github.ref == 'refs/heads/qa'
-      run: |
-        echo "Ejecucion CICD Integration QA"
-      shell: bash
-    - name: Run script file
-      if: github.ref == 'refs/heads/dev'
-      run: |
-        echo "Ejecucion CICD Integration Dev"
-      shell: bash
-    - name: Run script file
-      if: github.ref == 'refs/heads/main'
+    - name: Run script file Prod
+      if: github.ref != 'refs/heads/main'
       run: |
         echo "Ejecucion CICD Integration Prod"
       shell: bash
