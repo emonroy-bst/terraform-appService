@@ -1,0 +1,19 @@
+name: 'CI Integration'
+on:
+  pull_request:
+    branches:
+      - "main"
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  CI:
+    name: 'Verifier Build'
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+    - name: Run script file
+      run: |
+        echo "Ejecucion CI Integration"
+      shell: bash
